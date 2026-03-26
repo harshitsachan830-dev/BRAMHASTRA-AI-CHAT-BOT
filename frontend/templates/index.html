@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BrahmastraAI Ultra</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="page-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+
+        <div class="container">
+            <header class="hero glass-card">
+                <div class="hero-content">
+                    <span class="hero-badge">AI HEALTH INTELLIGENCE PLATFORM</span>
+                    <h1>BrahmastraAI Ultra</h1>
+                    <p>
+                        A hackathon-ready health assistant for symptom guidance, medicine scanning,
+                        food analysis, medical report review, hospital support, and AI-powered health insights.
+                    </p>
+
+                    <div class="hero-tags">
+                        <span>Brahmastra AI</span>
+                        <span>Medicine Scan</span>
+                        <span>Food Analysis</span>
+                        <span>Report Analyzer</span>
+                    </div>
+                </div>
+
+                <div class="hero-side">
+                    <div class="mini-stat">
+                        <h3>Smart</h3>
+                        <p>Chat + Scan + Analyze</p>
+                    </div>
+                    <div class="mini-stat">
+                        <h3>Safe</h3>
+                        <p>Doctor & Hospital Guidance</p>
+                    </div>
+                    <div class="mini-stat">
+                        <h3>Fast</h3>
+                        <p>Accurate & consistent</p>
+                    </div>
+                </div>
+            </header>
+
+            <div class="grid">
+                <aside class="left-panel">
+                    <section class="card glass-card">
+                        <div class="section-top">
+                            <div>
+                                <span class="section-label">Assistant</span>
+                                <h2>Ask Anything</h2>
+                            </div>
+                            <span class="status-pill live">Live</span>
+                        </div>
+
+                        <label class="field-label" for="userInput">Health or general question</label>
+                        <textarea id="userInput" placeholder="Type symptoms, medicine doubts, food questions, wellness queries, or general health issues..."></textarea>
+
+                        <div class="button-row">
+                            <button class="btn btn-primary" onclick="sendMessage()">Analyze</button>
+                            <button class="btn btn-secondary" onclick="startVoiceInput()">🎤 Speak</button>
+                            <button class="btn btn-secondary" onclick="speakResult()">🔊 Read Answer</button>
+                            <button class="btn btn-ghost" onclick="stopSpeaking()">⏹ Stop</button>
+                        </div>
+                    </section>
+
+                    <section class="card glass-card">
+                        <div class="section-top">
+                            <div>
+                                <span class="section-label">Vision AI</span>
+                                <h2>Smart Camera Scanner</h2>
+                            </div>
+                            <span class="status-pill vision">Scanner</span>
+                        </div>
+
+                        <label class="field-label" for="scanMode">Select scan mode</label>
+                        <select id="scanMode" class="premium-select">
+                            <option value="medicine">💊 Medicine Detection</option>
+                            <option value="food">🍔 Food Analysis</option>
+                        </select>
+
+                        <div class="camera-shell">
+                            <video id="camera" autoplay playsinline width="100%"></video>
+                            <canvas id="snapshot" style="display:none;"></canvas>
+
+                            <div class="scan-line"></div>
+                            <span class="corner tl"></span>
+                            <span class="corner tr"></span>
+                            <span class="corner bl"></span>
+                            <span class="corner br"></span>
+                        </div>
+
+                        <div class="button-row">
+                            <button class="btn btn-primary" onclick="startCamera()">📷 Start Camera</button>
+                            <button class="btn btn-ghost" onclick="stopCamera()">⛔ Stop Camera</button>
+                            <button class="btn btn-secondary" onclick="captureImage()">📸 Capture &amp; Detect</button>
+                        </div>
+                    </section>
+
+                    <section class="card glass-card">
+                        <div class="section-top">
+                            <div>
+                                <span class="section-label">Upload</span>
+                                <h2>Medical Report Analyzer</h2>
+                            </div>
+                            <span class="status-pill report">PDF / TXT</span>
+                        </div>
+
+                        <label class="field-label" for="reportFileInput">Upload report file</label>
+                        <input type="file" id="reportFileInput" class="file-input" accept=".txt,.pdf,.jpg,.jpeg,.png" />
+
+                        <div class="button-row">
+                            <button class="btn btn-primary" onclick="analyzeReport()">📄 Analyze Report</button>
+                        </div>
+                    </section>
+                </aside>
+
+                <main class="right-panel">
+                    <section class="card glass-card result-card">
+                        <div class="section-top result-top">
+                            <div>
+                                <span class="section-label">Output</span>
+                                <h2 id="resultTitle">Result</h2>
+                            </div>
+                            <span class="status-pill ai">AI Generated</span>
+                        </div>
+
+                        <div id="typingIndicator" class="typing-indicator" style="display: none;">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <p>AI is analyzing...</p>
+                        </div>
+
+                        <div id="resultAnswer" class="answer-box">Your result will appear here.</div>
+
+                        <div class="score-card">
+                            <div class="score-head">
+                                <span>Health Score</span>
+                                <strong id="scoreText">0 / 100</strong>
+                            </div>
+
+                            <div class="meter">
+                                <div id="meterFill" class="meter-fill"></div>
+                            </div>
+                        </div>
+
+                        <div class="info-grid">
+                            <div class="info-tile">
+                                <span class="tile-label">Risk Level</span>
+                                <span id="riskLevel" class="tile-value">-</span>
+                            </div>
+
+                            <div class="info-tile wide">
+                                <span class="tile-label">Explanation</span>
+                                <span id="explanation" class="tile-value text-block">-</span>
+                            </div>
+                        </div>
+
+                        <div class="bottom-grid">
+                            <div class="steps panel">
+                                <div class="panel-head">
+                                    <h3>Next Steps</h3>
+                                    <span>Guidance</span>
+                                </div>
+                                <ul id="nextSteps"></ul>
+                            </div>
+
+                            <div class="doctor-box panel">
+                                <div class="panel-head">
+                                    <h3>Doctor Recommendation</h3>
+                                    <span>Care Plan</span>
+                                </div>
+
+                                <div class="doctor-list">
+                                    <p><strong>Specialist:</strong> <span id="doctorSpecialist">-</span></p>
+                                    <p><strong>Urgency:</strong> <span id="doctorUrgency">-</span></p>
+                                    <p><strong>Action:</strong> <span id="doctorAction">-</span></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hospital-box panel">
+                            <div class="panel-head">
+                                <h3>Nearby Hospitals</h3>
+                                <span>Emergency Ready</span>
+                            </div>
+                            <p class="helper-text">Open nearby hospitals in Maps using your current location.</p>
+                            <button type="button" class="btn btn-secondary full-width" onclick="findHospitals()">Find Nearby Hospitals</button>
+                        </div>
+
+                        <button id="downloadBtn" class="btn btn-warning full-width" onclick="downloadReport()">Download PDF Report</button>
+                    </section>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
